@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.css": "/odo-app/static/css/main.b5320759.css",
-    "main.js": "/odo-app/static/js/main.568dd36e.js",
-    "index.html": "/odo-app/index.html",
-    "main.b5320759.css.map": "/odo-app/static/css/main.b5320759.css.map",
-    "main.568dd36e.js.map": "/odo-app/static/js/main.568dd36e.js.map"
+    "main.css": "/todo-app/static/css/main.b5320759.css",
+    "main.js": "/todo-app/static/js/main.568dd36e.js",
+    "index.html": "/todo-app/index.html",
+    "main.b5320759.css.map": "/todo-app/static/css/main.b5320759.css.map",
+    "main.568dd36e.js.map": "/todo-app/static/js/main.568dd36e.js.map"
   },
   "entrypoints": [
     "static/css/main.b5320759.css",
