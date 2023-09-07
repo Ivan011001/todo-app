@@ -70,7 +70,7 @@ export default class App extends Component {
   };
 
   render() {
-    const { filter, onlyCompleted } = this.state;
+    const { todos, filter, onlyCompleted } = this.state;
     const filteredTodos = this.filterTodos();
 
     return (
@@ -79,7 +79,7 @@ export default class App extends Component {
           <TodoForm onSubmit={this.onFormSubmit} />
         </Section>
         <Section title="Your todos">
-          {filteredTodos.length !== 0 ? (
+          {todos.length !== 0 ? (
             <>
               <TodoSearch
                 onChange={this.onFilterChange}
