@@ -8,14 +8,25 @@ import TodoSearch from './TodoSearch/TodoSearch';
 export default class App extends Component {
   state = {
     todos: [
-      { id: 'id-1', task: 'eat  pizza', completed: false },
-      { id: 'id-2', task: 'eat  soup', completed: false },
-      { id: 'id-3', task: 'drink  water', completed: false },
-      { id: 'id-4', task: 'drink milk', completed: false },
+      { id: 'id-1', task: 'Learn React.js', completed: false },
+      { id: 'id-2', task: 'Learn Node.js', completed: false },
+      { id: 'id-3', task: 'Learn TS', completed: false },
+      { id: 'id-4', task: 'Learn React Native', completed: false },
     ],
     filter: '',
     onlyCompleted: false,
   };
+
+  componentDidMount() {
+    const parsedTodos = JSON.parse(localStorage.getItem('todos'));
+
+    if (parsedTodos) this.setState({ todos: parsedTodos });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.todos !== prevState.todos)
+      localStorage.setItem('todos', JSON.stringify(this.state.todos));
+  }
 
   onCompletedChange = id => {
     this.setState(prevState => ({
