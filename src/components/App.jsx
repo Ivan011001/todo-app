@@ -4,17 +4,18 @@ import Section from './Section/Section';
 import TodoForm from './TodoForm/TodoForm';
 import TodoList from './TodoList/TodoList';
 import TodoSearch from './TodoSearch/TodoSearch';
+import IconButton from './IconButton/IconButton';
+import Modal from './Modal/Modal';
+
+import { ReactComponent as AddIcon } from '../svg/add.svg';
+import { ReactComponent as ExitIcon } from '../svg/exit.svg';
 
 export default class App extends Component {
   state = {
-    todos: [
-      { id: 'id-1', task: 'Learn React.js', completed: false },
-      { id: 'id-2', task: 'Learn Node.js', completed: false },
-      { id: 'id-3', task: 'Learn TS', completed: false },
-      { id: 'id-4', task: 'Learn React Native', completed: false },
-    ],
+    todos: [],
     filter: '',
     onlyCompleted: false,
+    modalIsVisible: false,
   };
 
   componentDidMount() {
@@ -26,6 +27,10 @@ export default class App extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (this.state.todos !== prevState.todos)
       localStorage.setItem('todos', JSON.stringify(this.state.todos));
+
+    if (prevState.todos.length !== this.state.todos.length) {
+      this.toggleModal();
+    }
   }
 
   onCompletedChange = id => {
@@ -68,6 +73,10 @@ export default class App extends Component {
     this.setState({ todos: [] });
   };
 
+  toggleModal = () => {
+    this.setState(prevState => ({ modalIsVisible: !prevState.modalIsVisible }));
+  };
+
   filterTodos = () => {
     const { todos, filter, onlyCompleted } = this.state;
     const normalizedFilter = filter.toLowerCase();
@@ -81,13 +90,23 @@ export default class App extends Component {
   };
 
   render() {
-    const { todos, filter, onlyCompleted } = this.state;
+    const { todos, filter, onlyCompleted, modalIsVisible } = this.state;
     const filteredTodos = this.filterTodos();
 
     return (
       <div>
         <Section title="Add new todo">
-          <TodoForm onSubmit={this.onFormSubmit} />
+          <IconButton onClick={this.toggleModal} aria-label="Add todo form">
+            <AddIcon width="32" height="32" />
+          </IconButton>
+          {modalIsVisible && (
+            <Modal>
+              <TodoForm onSubmit={this.onFormSubmit} />
+              <IconButton onClick={this.toggleModal} aria-label="exit form">
+                <ExitIcon width="32" height="32" />
+              </IconButton>
+            </Modal>
+          )}
         </Section>
         <Section title="Your todos">
           {todos.length !== 0 ? (
