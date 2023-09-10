@@ -1,5 +1,6 @@
 import { nanoid } from 'nanoid';
 import { Component } from 'react';
+import { createPortal } from 'react-dom';
 import Section from './Section/Section';
 import TodoForm from './TodoForm/TodoForm';
 import TodoList from './TodoList/TodoList';
@@ -9,6 +10,8 @@ import Modal from './Modal/Modal';
 
 import { ReactComponent as AddIcon } from '../svg/add.svg';
 import { ReactComponent as ExitIcon } from '../svg/exit.svg';
+
+const modalRoot = document.querySelector('#modal-root');
 
 export default class App extends Component {
   state = {
@@ -27,10 +30,6 @@ export default class App extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (this.state.todos !== prevState.todos)
       localStorage.setItem('todos', JSON.stringify(this.state.todos));
-
-    if (prevState.todos.length !== this.state.todos.length) {
-      this.toggleModal();
-    }
   }
 
   onCompletedChange = id => {
@@ -57,6 +56,8 @@ export default class App extends Component {
         ...prevState.todos,
       ],
     }));
+
+    this.toggleModal();
   };
 
   onFilterChange = evt => {
@@ -99,14 +100,17 @@ export default class App extends Component {
           <IconButton onClick={this.toggleModal} aria-label="Add todo form">
             <AddIcon width="32" height="32" />
           </IconButton>
-          {modalIsVisible && (
-            <Modal>
-              <TodoForm onSubmit={this.onFormSubmit} />
-              <IconButton onClick={this.toggleModal} aria-label="exit form">
-                <ExitIcon width="32" height="32" />
-              </IconButton>
-            </Modal>
-          )}
+
+          {modalIsVisible &&
+            createPortal(
+              <Modal onClose={this.toggleModal}>
+                <TodoForm onSubmit={this.onFormSubmit} />
+                <IconButton onClick={this.toggleModal} aria-label="exit form">
+                  <ExitIcon width="32" height="32" />
+                </IconButton>
+              </Modal>,
+              modalRoot
+            )}
         </Section>
         <Section title="Your todos">
           {todos.length !== 0 ? (
